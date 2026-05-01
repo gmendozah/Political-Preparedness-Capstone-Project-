@@ -3,16 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motion_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.android.politicalpreparedness.MainActivity">
+        app:layoutDescription="@xml/motion_scene_launch"
+        tools:context="com.example.android.politicalpreparedness.launch.LaunchFragment">
 
-        <!-- TODO: Add image for home screen logo. -->
+        <ImageView
+            android:id="@+id/ballot_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ballot_logo"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintBottom_toTopOf="@id/upcoming_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-        <!-- TODO: Add Button to navigate to upcoming elections. -->
+        <Button
+            android:id="@+id/upcoming_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/upcoming_elections"
+            app:layout_constraintBottom_toTopOf="@id/representative_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ballot_image" />
 
-        <!-- TODO: Add Button to navigate to representatives. -->
+        <Button
+            android:id="@+id/representative_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:text="@string/find_my_representatives"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/upcoming_button" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
