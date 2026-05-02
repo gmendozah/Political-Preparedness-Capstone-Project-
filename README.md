@@ -19,7 +19,9 @@ It leverages the following components from the Jetpack library:
 
 ## **Important**
 
-In the `local.properties` file, set your key to the `CIVIC_API_KEY` variable configured for both: **Google Civic Information API** and **Geocoding API**.
+API Keys are stored in the `local.properties` file. 
+1. Set the `GOOGLE_API_KEY` key variable configured for: **Google Civic Information API**. This key is used to get the **upcoming elections** data.
+2. Additionally, set the `GEOCODIO_API_KEY` key variable from [Geocodio](https://www.geocod.io/). This key is used to get **representatives** data given a Lat, Lng coordinates pair or an Address
 
 ## Setting up the Repository
 
