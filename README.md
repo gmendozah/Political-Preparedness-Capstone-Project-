@@ -17,6 +17,10 @@ It leverages the following components from the Jetpack library:
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) with the SafeArgs plugin for parameter passing between fragments
 
 
+## **Important**
+
+In the `local.properties` file, set your key to the `CIVIC_API_KEY` variable configured for both: **Google Civic Information API** and **Geocoding API**.
+
 ## Setting up the Repository
 
 To get started with this project, simply pull the repository and import the project into Android Studio. From there, deploy the project to an emulator or device. 
@@ -30,7 +34,7 @@ To get started with this project, simply pull the repository and import the proj
 
 * For the most part, the TODOs in the project will guide you through getting the project completed. There is a general package architecture and *most* files are present. 
 * Hints are provided for tricky parts of the application that may extend beyond basic Android development skills.
-* As databinding is integral to the project architecture, it is important to be familiar with the IDE features such s cleaning and rebuilding the project as well as invalidating caches. 
+* As databinding is integral to the project architecture, it is important to be familiar with the IDE features such s cleaning and rebuilding the project as well as invalidating caches.
 
 ## Suggested Workflow
 
