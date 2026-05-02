@@ -14,8 +14,8 @@
             android:id="@+id/ballot_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ballot_logo"
             android:contentDescription="@string/app_name"
+            android:src="@drawable/ballot_logo"
             app:layout_constraintBottom_toTopOf="@id/upcoming_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,7 @@
             android:text="@string/upcoming_elections"
             app:layout_constraintBottom_toTopOf="@id/representative_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ballot_image" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/representative_button"
@@ -47,8 +46,7 @@
             android:text="@string/find_my_representatives"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/upcoming_button" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
