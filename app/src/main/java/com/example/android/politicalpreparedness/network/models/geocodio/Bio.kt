@@ -1,0 +1,9 @@
+package com.example.android.politicalpreparedness.network.models.geocodio
+
+import com.squareup.moshi.Json
+
+data class Bio(
+    @Json(name = "first_name") val firstName: String?,
+    @Json(name = "last_name") val lastName: String?,
+    val party: String?
+)
