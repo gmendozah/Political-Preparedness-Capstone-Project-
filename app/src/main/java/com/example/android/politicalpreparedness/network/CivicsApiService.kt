@@ -34,7 +34,11 @@ interface CivicsApiService {
     @GET("elections")
     suspend fun getElections(): ElectionResponse
 
-    //TODO: Add voterinfo API Call
+    @GET("voterinfo")
+    suspend fun getVoterInfo(
+        @retrofit2.http.Query("address") address: String,
+        @retrofit2.http.Query("electionId") electionId: Int
+    ): com.example.android.politicalpreparedness.network.models.VoterInfoResponse
 
     //TODO: Add representatives API Call
 }

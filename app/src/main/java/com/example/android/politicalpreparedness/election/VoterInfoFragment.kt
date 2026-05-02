@@ -6,30 +6,50 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
+import android.content.Intent
+import android.net.Uri
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
+import com.example.android.politicalpreparedness.database.ElectionDatabase
+import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+
 class VoterInfoFragment : Fragment() {
+    private val args: VoterInfoFragmentArgs by navArgs()
+    private lateinit var viewModel: VoterInfoViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?)
-    : View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val binding = FragmentVoterInfoBinding.inflate(inflater)
+        binding.lifecycleOwner = this
 
-        // TODO: Add ViewModel values and create ViewModel
+        val database = ElectionDatabase.getInstance(requireContext())
+        val viewModelFactory = VoterInfoViewModelFactory(database.electionDao)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(VoterInfoViewModel::class.java)
 
-        // TODO: Add binding values
+        binding.viewModel = viewModel
 
-        // TODO: Populate voter info -- hide views without provided data.
+        val election = args.argElection
+        viewModel.fetchVoterInfo(election)
 
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-        */
+        viewModel.urlToOpen.observe(viewLifecycleOwner) { url ->
+            url?.let {
+                loadUrl(it)
+                viewModel.onUrlOpened()
+            }
+        }
 
-        // TODO: Handle loading of URLs
-
-        // TODO: Handle save button UI state
-        // TODO: cont'd Handle save button clicks
-        return null
+        return binding.root
     }
 
-    // TODO: Create method to load URL intents
+    private fun loadUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startContextIntent(intent)
+    }
+
+    private fun startContextIntent(intent: Intent) {
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(intent)
+        }
+    }
 }
