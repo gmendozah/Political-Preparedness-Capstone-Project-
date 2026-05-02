@@ -10,8 +10,7 @@ import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ElectionsViewModel(private val dataSource: ElectionDao): ViewModel() {
-
+class ElectionsViewModel(private val dataSource: ElectionDao) : ViewModel() {
     private val _upcomingElections = MutableLiveData<List<Election>>()
     val upcomingElections: LiveData<List<Election>>
         get() = _upcomingElections
@@ -45,5 +44,4 @@ class ElectionsViewModel(private val dataSource: ElectionDao): ViewModel() {
     fun onVoterInfoNavigated() {
         _navigateToVoterInfo.value = null
     }
-
 }

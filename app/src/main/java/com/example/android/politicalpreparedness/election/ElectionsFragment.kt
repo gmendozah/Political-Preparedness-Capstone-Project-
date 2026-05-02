@@ -13,15 +13,16 @@ import com.example.android.politicalpreparedness.databinding.FragmentElectionBin
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.election.adapter.ElectionListener
 
-class ElectionsFragment: Fragment() {
+class ElectionsFragment : Fragment() {
 
     private lateinit var viewModel: ElectionsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?)
-    : View {
+        savedInstanceState: Bundle?
+    )
+            : View {
         val binding = FragmentElectionBinding.inflate(inflater)
         binding.lifecycleOwner = this
 

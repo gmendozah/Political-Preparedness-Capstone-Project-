@@ -4,9 +4,7 @@ import com.example.android.politicalpreparedness.BuildConfig
 import okhttp3.OkHttpClient
 
 class CivicsHttpClient : OkHttpClient() {
-
     companion object {
-
         private const val API_KEY = BuildConfig.CIVIC_API_KEY
 
         fun getClient(): OkHttpClient {
@@ -27,5 +25,4 @@ class CivicsHttpClient : OkHttpClient() {
         }
 
     }
-
 }
