@@ -1,26 +1,80 @@
 package com.example.android.politicalpreparedness.representative
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.network.GeocodioApi
+import com.example.android.politicalpreparedness.network.models.*
+import com.example.android.politicalpreparedness.representative.model.Representative
+import kotlinx.coroutines.launch
 
-class RepresentativeViewModel: ViewModel() {
+class RepresentativeViewModel : ViewModel() {
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives: LiveData<List<Representative>> get() = _representatives
 
-    //TODO: Establish live data for representatives and address
+    private val _address = MutableLiveData<Address>()
+    val address: LiveData<Address> get() = _address
 
-    //TODO: Create function to fetch representatives from API from a provided address
+    fun fetchRepresentatives(address: String) {
+        viewModelScope.launch {
+            try {
+                val response = GeocodioApi.retrofitService.getRepresentatives(address)
+                _representatives.value = parseRepresentatives(response)
+            } catch (_: Exception) {
+                _representatives.value = emptyList()
+            }
+        }
+    }
 
-    /**
-     *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
+    fun getAddressFromLocation(lat: Double, lon: Double) {
+        viewModelScope.launch {
+            try {
+                val response = GeocodioApi.retrofitService.reverseGeocode("$lat,$lon")
+                if (response.results.isNotEmpty()) {
+                    val components = response.results[0].addressComponents
+                    val newAddress = Address(
+                        line1 = "${components?.number ?: ""} ${components?.street ?: ""}".trim(),
+                        city = components?.city ?: "",
+                        state = components?.state ?: "",
+                        zip = components?.zip ?: ""
+                    )
+                    _address.value = newAddress
+                    _representatives.value = parseRepresentatives(response)
+                }
+            } catch (_: Exception) {
+            }
+        }
+    }
 
-    val (offices, officials) = getRepresentativesDeferred.await()
-    _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
+    private fun parseRepresentatives(response: GeocodioResponse): List<Representative> {
+        val representativesMap = mutableMapOf<String, Representative>()
 
-    Note: getRepresentatives in the above code represents the method used to fetch data from the API
-    Note: _representatives in the above code represents the established mutable live data housing representatives
+        response.results.forEach { result ->
+            result.fields?.congressionalDistricts?.forEach { district ->
+                val office = Office(district.name, Division("dummy", "us", ""), emptyList())
+                district.legislators?.forEach { legislator ->
+                    val legislatorId = legislator.id
+                    if (!representativesMap.containsKey(legislatorId)) {
+                        val official = Official(
+                            name = "${legislator.bio?.firstName} ${legislator.bio?.lastName}",
+                            party = legislator.bio?.party,
+                            phones = legislator.contact?.phone?.let { listOf(it) },
+                            urls = legislator.contact?.website?.let { listOf(it) },
+                            photoUrl = legislator.bio?.photoUrl,
+                            channels = mutableListOf<Channel>().apply {
+                                legislator.social?.facebook?.let { add(Channel("Facebook", it)) }
+                                legislator.social?.twitter?.let { add(Channel("Twitter", it)) }
+                            })
+                        representativesMap[legislatorId] = Representative(official, office)
+                    }
+                }
+            }
+        }
+        return representativesMap.values.toList()
+    }
 
-     */
-
-    //TODO: Create function get address from geo location
-
-    //TODO: Create function to get address from individual fields
-
+    fun setAddress(address: Address) {
+        _address.value = address
+    }
 }

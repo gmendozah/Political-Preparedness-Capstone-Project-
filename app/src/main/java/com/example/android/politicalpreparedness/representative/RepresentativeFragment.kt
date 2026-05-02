@@ -1,72 +1,127 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
-import java.util.Locale
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.google.android.gms.location.LocationServices
 
-class DetailFragment : Fragment() {
-
+class RepresentativeFragment : Fragment() {
     companion object {
-        //TODO: Add Constant for Location request
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
-    //TODO: Declare ViewModel
+    private val viewModel: RepresentativeViewModel by viewModels()
+    private lateinit var binding: FragmentRepresentativeBinding
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
 
-        //TODO: Establish bindings
+        binding = FragmentRepresentativeBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
-        //TODO: Define and assign Representative adapter
+        val adapter = RepresentativeListAdapter()
+        binding.representativeRecycler.adapter = adapter
 
-        //TODO: Populate Representative adapter
+        viewModel.representatives.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
 
-        //TODO: Establish button listeners for field and location search
+        viewModel.address.observe(viewLifecycleOwner) {
+            val adapter = binding.state.adapter as? ArrayAdapter<String>
+            val position = adapter?.getPosition(it.state) ?: 0
+            if (position >= 0) {
+                binding.state.setSelection(position)
+            }
+        }
 
+        binding.buttonSearch.setOnClickListener {
+            hideKeyboard()
+            val addressLine1 = binding.addressLine1.text.toString()
+            val city = binding.city.text.toString()
+            val zip = binding.zip.text.toString()
+
+            if (addressLine1.isBlank() || city.isBlank() || zip.isBlank()) {
+                // Show error or toast
+                return@setOnClickListener
+            }
+
+            val address = Address(
+                addressLine1,
+                binding.addressLine2.text.toString(),
+                city,
+                binding.state.selectedItem.toString(),
+                zip
+            )
+            viewModel.setAddress(address)
+            viewModel.fetchRepresentatives(address.toFormattedString())
+        }
+
+        binding.buttonLocation.setOnClickListener {
+            hideKeyboard()
+            if (checkLocationPermissions()) {
+                getLocation()
+            }
+        }
+
+        return binding.root
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation()
+            }
+        }
     }
 
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
             true
         } else {
-            //TODO: Request Location permissions
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
+            )
             false
         }
     }
 
-    private fun isPermissionGranted() : Boolean {
-        //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
+    private fun isPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getLocation() {
-        //TODO: Get location from LocationServices
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
-    }
-
-    private fun geoCodeLocation(location: Location): Address {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        try {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    viewModel.getAddressFromLocation(location.latitude, location.longitude)
                 }
-                .first()
+            }
+        } catch (_: SecurityException) {
+        }
     }
 
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
-
 }

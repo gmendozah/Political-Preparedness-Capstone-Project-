@@ -11,4 +11,11 @@
     <string name="unfollow_election">Unfollow Election</string>
     <string name="election_info">Election Information</string>
 
+    <string name="representative_search">Representative Search</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="use_my_location">Use My Location</string>
+    <string name="my_representatives">My Representatives</string>
 </resources>

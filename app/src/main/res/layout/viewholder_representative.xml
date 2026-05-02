@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="representative"
+            type="com.example.android.politicalpreparedness.representative.model.Representative" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/representative_photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:profileImage="@{representative.official.photoUrl}"
+                tools:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/office_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@{representative.office.name}"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/representative_photo"
+                app:layout_constraintTop_toTopOf="@id/representative_photo"
+                tools:text="President of the United States" />
+
+            <TextView
+                android:id="@+id/official_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{representative.official.name}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/office_name"
+                app:layout_constraintTop_toBottomOf="@id/office_name"
+                tools:text="Joe Biden" />
+
+            <TextView
+                android:id="@+id/party_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{representative.official.party}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/official_name"
+                app:layout_constraintTop_toBottomOf="@id/official_name"
+                tools:text="Democratic Party" />
+
+            <ImageView
+                android:id="@+id/facebook_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_facebook"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@id/party_name"
+                app:layout_constraintTop_toBottomOf="@id/party_name" />
+
+            <ImageView
+                android:id="@+id/twitter_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_twitter"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/facebook_icon"
+                app:layout_constraintTop_toTopOf="@id/facebook_icon" />
+
+            <ImageView
+                android:id="@+id/www_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_www"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/twitter_icon"
+                app:layout_constraintTop_toTopOf="@id/facebook_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>
