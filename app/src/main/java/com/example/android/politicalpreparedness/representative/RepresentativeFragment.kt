@@ -3,15 +3,19 @@ package com.example.android.politicalpreparedness.representative
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
@@ -46,8 +50,9 @@ class RepresentativeFragment : Fragment() {
             val city = binding.city.text.toString()
             val zip = binding.zip.text.toString()
 
-            if (addressLine1.isBlank() || city.isBlank() || zip.isBlank()) {
-                // Show error or toast
+            if (addressLine1.isBlank()) {
+                Toast.makeText(requireContext(), "Please enter address line 1", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -79,6 +84,8 @@ class RepresentativeFragment : Fragment() {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation()
+            } else {
+                showSettingsDialog()
             }
         }
     }
@@ -110,6 +117,20 @@ class RepresentativeFragment : Fragment() {
             }
         } catch (_: SecurityException) {
         }
+    }
+
+    private fun showSettingsDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.location_permission_required)
+            .setMessage(R.string.location_permission_description)
+            .setPositiveButton(R.string.settings) { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun hideKeyboard() {
