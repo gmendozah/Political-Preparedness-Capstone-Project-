@@ -4,16 +4,16 @@
     xmlns:motion="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
     </data>
 
-    <!-- TODO: Add motion scene to hide form on vertical scroll. -->
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motion_layout"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layoutDescription="@xml/fragment_representative_scene">
 
         <TextView
@@ -55,8 +55,8 @@
             android:hint="@string/city"
             android:inputType="textPostalAddress"
             android:text="@{viewModel.address.city}"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/state"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
         <Spinner
@@ -65,10 +65,11 @@
             android:layout_height="0dp"
             android:autofillHints=""
             android:entries="@array/states"
-            app:layout_constraintStart_toEndOf="@id/city"
+            app:layout_constraintBottom_toBottomOf="@id/city"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/city"
             app:layout_constraintTop_toTopOf="@id/city"
-            app:layout_constraintBottom_toBottomOf="@id/city"/>
+            app:stateValue="@{viewModel.address.state}" />
 
         <EditText
             android:id="@+id/zip"
@@ -79,16 +80,16 @@
             android:inputType="number"
             android:maxLength="5"
             android:text="@{viewModel.address.zip}"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/city"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/city" />
 
         <Button
             android:id="@+id/button_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/find_my_representatives"
             android:backgroundTint="@color/colorPrimary"
+            android:text="@string/find_my_representatives"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/zip" />
 
@@ -96,8 +97,8 @@
             android:id="@+id/button_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/use_my_location"
             android:backgroundTint="@color/colorPrimary"
+            android:text="@string/use_my_location"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
@@ -115,8 +116,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/representative_title"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/representative_title" />
 
         <TextView
             android:id="@+id/list_placeholder"
@@ -125,8 +126,8 @@
             android:gravity="center"
             android:textAlignment="center"
             android:visibility="gone"
-            motion:visibilityMode="ignore"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            motion:visibilityMode="ignore" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

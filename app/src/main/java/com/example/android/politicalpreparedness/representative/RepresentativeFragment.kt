@@ -40,14 +40,6 @@ class RepresentativeFragment : Fragment() {
             adapter.submitList(it)
         }
 
-        viewModel.address.observe(viewLifecycleOwner) {
-            val adapter = binding.state.adapter as? ArrayAdapter<String>
-            val position = adapter?.getPosition(it.state) ?: 0
-            if (position >= 0) {
-                binding.state.setSelection(position)
-            }
-        }
-
         binding.buttonSearch.setOnClickListener {
             hideKeyboard()
             val addressLine1 = binding.addressLine1.text.toString()
