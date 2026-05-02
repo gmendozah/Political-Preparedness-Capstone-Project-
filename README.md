@@ -16,6 +16,12 @@ It leverages the following components from the Jetpack library:
 * [Data Binding](https://developer.android.com/topic/libraries/data-binding/) with binding adapters
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) with the SafeArgs plugin for parameter passing between fragments
 
+## Screenshots
+<img width="300" alt="Screenshot_20260502_134240" src="https://github.com/user-attachments/assets/287ae609-b253-426e-85af-872c3a9ac855" />
+<img width="300" alt="Screenshot_20260502_131644" src="https://github.com/user-attachments/assets/8bf6c43f-dfe6-4b4f-9346-7a48363db11b" />
+<img width="300" alt="Screenshot_20260502_131617" src="https://github.com/user-attachments/assets/f5cb06f1-8913-41b8-a503-55ce085ea714" />
+<img width="300" alt="Screenshot_20260502_131600" src="https://github.com/user-attachments/assets/59d27f1d-688f-42db-800e-ef9cda820076" />
+
 
 ## **Important**
 
